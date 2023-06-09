@@ -7,15 +7,14 @@
  * Created At: 09.06.2023
  *
  */
-
 import * as React from "react";
-import { Box, Flex, useMediaQuery, Link } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery, Link, Stack } from "@chakra-ui/react";
 import NavigationBarBrandName from "@/components/NavigationBarBrandName";
 import NextLink from "next/link";
 import NavigationBarItems from "@/components/NavigationBarItems";
 
 export default function NavigationBar() {
-  const isMobile = useMediaQuery("(max-width: 768px)")[0];
+  const isMobile = useMediaQuery("(max-width: 1080px)")[0];
 
   return (
     <>
@@ -34,12 +33,19 @@ export default function NavigationBar() {
               w={"100%"}
               alignItems={"center"}
               justifyContent={"space-between"}
-              paddingInline={32}
+              paddingInline={[0, 0, 8, 64]}
             >
               <Link as={NextLink as any} href={"/"}>
                 <NavigationBarBrandName />
               </Link>
-              <NavigationBarItems />
+              <Flex
+                direction={isMobile ? "column" : "row"}
+                alignItems={"center"}
+                gap={8}
+                justifyContent={"space-between"}
+              >
+                <NavigationBarItems mobile={isMobile} />
+              </Flex>
             </Flex>
           </>
         )}

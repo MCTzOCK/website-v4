@@ -9,19 +9,13 @@
  */
 import { Image } from "@chakra-ui/image";
 import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import BrandAppImage from "@/components/BrandAppImage";
 
 export default function NavigationBarBrandName() {
   return (
     <>
       <Flex alignItems={"center"} gap={4}>
-        <Image
-          src={"https://avatars.githubusercontent.com/u/53553315?v=4"}
-          alt={"Logo"}
-          w={16}
-          h={16}
-          rounded={"xl"}
-          boxShadow={"xl"}
-        />
+        <BrandAppImage />
         <Stack>
           <Heading>Ben Siebert</Heading>
           <Text fontSize={"xl"} color={"gray.200"}>
