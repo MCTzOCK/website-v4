@@ -2,8 +2,10 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 * {
   scrollbar-width: thin;
+  font-family: 'Roboto Mono', monospace !important;
 }

@@ -38,9 +38,6 @@ export default function Footer() {
               <BrandAppImage />
               <Box>
                 <Heading>Ben Siebert</Heading>
-                <Text>
-                  Copyright &copy; {new Date().getFullYear()} Ben Siebert
-                </Text>
               </Box>
             </Flex>
             <ButtonGroup justifyContent={"center"}>

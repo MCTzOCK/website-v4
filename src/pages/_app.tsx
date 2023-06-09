@@ -15,6 +15,7 @@ import { theme } from "@/lib/theme";
 import NavigationBar from "@/components/NavigationBar";
 import Footer from "@/components/Footer";
 import { Box } from "@chakra-ui/react";
+import "../styles/globals.css";
 
 export default function App(props: AppProps) {
   const [navbarHeight, setNavbarHeight] = React.useState(0);
