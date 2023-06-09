@@ -8,8 +8,14 @@
  *
  */
 
+import { config as dotenv } from "dotenv";
+dotenv();
+
 import next from "next";
 import express from "express";
+import mongoConnect from "../lib/mongoConnect";
+import UserModel from "../lib/models/UserModel";
+import * as crypto from "crypto";
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -17,7 +23,29 @@ const app = next({ dev });
 
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
+app.prepare().then(async () => {
+  await mongoConnect();
+
+  if (
+    !(await UserModel.findOne({
+      username: "admin",
+    }))
+  ) {
+    const adminPassword = crypto.randomBytes(16).toString("hex");
+
+    await UserModel.create({
+      username: "admin",
+      passwordHash: crypto
+        .createHash("sha256")
+        .update(adminPassword)
+        .digest("hex"),
+    });
+
+    console.log("Default admin user created:");
+    console.log("Username: admin");
+    console.log("Password: " + adminPassword);
+  }
+
   const server = express();
 
   server.get("*", (req, res) => {

@@ -12,11 +12,13 @@ import * as React from "react";
 import { ChakraProvider } from "@chakra-ui/provider";
 import { AppProps } from "next/app";
 import { theme } from "@/lib/theme";
+import NavigationBar from "@/components/NavigationBar";
 
 export default function App(props: AppProps) {
   return (
     <>
       <ChakraProvider theme={theme}>
+        <NavigationBar />
         <props.Component {...props.pageProps} />
       </ChakraProvider>
     </>
