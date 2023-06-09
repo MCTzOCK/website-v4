@@ -1,6 +1,24 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+/**
+ * src/pages/_app.tsx
+ *
+ * Author: Ben Siebert <hello@ben-siebert.de>
+ * Copyright: Copyright (c) 2018-2023 Ben Siebert. All rights reserved.
+ * License: Project License
+ * Created At: 09.06.2023
+ *
+ */
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import * as React from "react";
+import { ChakraProvider } from "@chakra-ui/provider";
+import { AppProps } from "next/app";
+import { theme } from "@/lib/theme";
+
+export default function App(props: AppProps) {
+  return (
+    <>
+      <ChakraProvider theme={theme}>
+        <props.Component {...props.pageProps} />
+      </ChakraProvider>
+    </>
+  );
 }
