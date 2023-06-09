@@ -63,7 +63,7 @@ export default function NavigationBarItems() {
       type: "menu",
       menuItems: [
         {
-          name: "Person / History",
+          name: "Person",
           href: "/about/person",
           icon: (
             <>
@@ -181,45 +181,46 @@ export default function NavigationBarItems() {
                       {item.name}
                     </Button>
                   </PopoverTrigger>
-                  <Portal>
-                    <PopoverContent
-                      bg={"black"}
-                      w={"fit-content"}
-                      minWidth={"30vmin"}
-                    >
-                      <PopoverBody>
-                        <Stack>
-                          {item.menuItems?.map((menuItem, index) => {
-                            return (
-                              <Link
-                                key={index}
-                                href={menuItem.href}
-                                as={NextLink as any}
-                                fontSize={"3xl"}
-                                fontWeight={"500"}
-                                p={6}
-                                rounded={"md"}
-                                _hover={{
-                                  backgroundColor: "gray.700",
-                                }}
+                  <PopoverContent
+                    bg={"black"}
+                    w={["90vmin", "fit-content"]}
+                    minWidth={"30vmin"}
+                    h={"fit-content"}
+                    overflow={"auto"}
+                    maxH={"40vh"}
+                  >
+                    <PopoverBody>
+                      <Stack>
+                        {item.menuItems?.map((menuItem, index) => {
+                          return (
+                            <Link
+                              key={index}
+                              href={menuItem.href}
+                              as={NextLink as any}
+                              fontSize={"3xl"}
+                              fontWeight={"500"}
+                              p={6}
+                              rounded={"md"}
+                              _hover={{
+                                backgroundColor: "gray.700",
+                              }}
+                            >
+                              <Flex
+                                alignItems={"center"}
+                                justifyContent={"space-between"}
+                                w={"100%"}
                               >
-                                <Flex
-                                  alignItems={"center"}
-                                  justifyContent={"space-between"}
-                                  w={"100%"}
-                                >
-                                  <AppImageWrapper>
-                                    {menuItem.icon}
-                                  </AppImageWrapper>
-                                  {menuItem.name}
-                                </Flex>
-                              </Link>
-                            );
-                          })}
-                        </Stack>
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Portal>
+                                <AppImageWrapper>
+                                  {menuItem.icon}
+                                </AppImageWrapper>
+                                {menuItem.name}
+                              </Flex>
+                            </Link>
+                          );
+                        })}
+                      </Stack>
+                    </PopoverBody>
+                  </PopoverContent>
                 </>
               )}
             </Popover>

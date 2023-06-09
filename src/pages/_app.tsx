@@ -13,6 +13,7 @@ import { ChakraProvider } from "@chakra-ui/provider";
 import { AppProps } from "next/app";
 import { theme } from "@/lib/theme";
 import NavigationBar from "@/components/NavigationBar";
+import Footer from "@/components/Footer";
 
 export default function App(props: AppProps) {
   return (
@@ -20,6 +21,7 @@ export default function App(props: AppProps) {
       <ChakraProvider theme={theme}>
         <NavigationBar />
         <props.Component {...props.pageProps} />
+        <Footer />
       </ChakraProvider>
     </>
   );

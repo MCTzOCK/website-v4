@@ -8,16 +8,71 @@
  *
  */
 import * as React from "react";
-import { Box, Flex, useMediaQuery, Link, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Flex,
+  useMediaQuery,
+  Link,
+  Stack,
+  useDisclosure,
+  Button,
+  IconButton,
+} from "@chakra-ui/react";
 import NavigationBarBrandName from "@/components/NavigationBarBrandName";
 import NextLink from "next/link";
 import NavigationBarItems from "@/components/NavigationBarItems";
+import BrandAppImage from "@/components/BrandAppImage";
+import { FaBars } from "react-icons/fa";
 
 export default function NavigationBar() {
   const isMobile = useMediaQuery("(max-width: 1080px)")[0];
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
+      <Drawer
+        isOpen={isOpen}
+        placement={"right"}
+        size={"full"}
+        onClose={onClose}
+      >
+        <DrawerOverlay />
+        <DrawerContent bg={"black"}>
+          <DrawerCloseButton />
+          <DrawerHeader>Menu</DrawerHeader>
+
+          <DrawerBody>
+            <Flex
+              direction={isMobile ? "column" : "row"}
+              alignItems={"center"}
+              gap={8}
+              justifyContent={"space-between"}
+            >
+              <NavigationBarItems />
+            </Flex>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button
+              variant="outline"
+              colorScheme="primary"
+              mr={3}
+              onClick={onClose}
+            >
+              Close
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+
       <Box
         bgColor={"black"}
         w={"100%"}
@@ -26,7 +81,22 @@ export default function NavigationBar() {
         boxShadow={"xl"}
       >
         {isMobile ? (
-          <></>
+          <>
+            <Flex
+              w={"100%"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Link as={NextLink as any} href={"/"}>
+                <BrandAppImage />
+              </Link>
+              <IconButton
+                aria-label={"Open Menu"}
+                icon={<FaBars />}
+                onClick={onOpen}
+              />
+            </Flex>
+          </>
         ) : (
           <>
             <Flex
@@ -44,7 +114,7 @@ export default function NavigationBar() {
                 gap={8}
                 justifyContent={"space-between"}
               >
-                <NavigationBarItems mobile={isMobile} />
+                <NavigationBarItems />
               </Flex>
             </Flex>
           </>
