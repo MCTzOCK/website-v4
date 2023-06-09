@@ -11,7 +11,7 @@
 import * as React from "react";
 import { Box, Flex, useMediaQuery, Link } from "@chakra-ui/react";
 import NavigationBarBrandName from "@/components/NavigationBarBrandName";
-import { default as NextLink } from "next/link";
+import NextLink from "next/link";
 import NavigationBarItems from "@/components/NavigationBarItems";
 
 export default function NavigationBar() {
@@ -36,10 +36,8 @@ export default function NavigationBar() {
               justifyContent={"space-between"}
               paddingInline={32}
             >
-              <Link>
-                <NextLink href={"/"}>
-                  <NavigationBarBrandName />
-                </NextLink>
+              <Link as={NextLink as any} href={"/"}>
+                <NavigationBarBrandName />
               </Link>
               <NavigationBarItems />
             </Flex>
