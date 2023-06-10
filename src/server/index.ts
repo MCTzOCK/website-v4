@@ -32,7 +32,13 @@ app.prepare().then(async () => {
       username: "admin",
     }))
   ) {
-    const adminPassword = crypto.randomBytes(16).toString("hex");
+    let adminPassword = "";
+
+    if (!process.env.DEFAULT_ADMIN_PASSWORD) {
+      adminPassword = crypto.randomBytes(16).toString("hex");
+    } else {
+      adminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+    }
 
     await UserModel.create({
       username: "admin",
@@ -60,7 +66,7 @@ app.prepare().then(async () => {
 
   const server = express();
 
-  server.get("*", (req, res) => {
+  server.all("*", (req, res) => {
     return handle(req, res);
   });
 
