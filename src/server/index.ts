@@ -16,6 +16,7 @@ import express from "express";
 import mongoConnect from "../lib/mongoConnect";
 import UserModel from "../lib/models/UserModel";
 import * as crypto from "crypto";
+import BlogModel from "../lib/models/BlogModel";
 
 const dev = process.env.NODE_ENV !== "production";
 
@@ -44,6 +45,17 @@ app.prepare().then(async () => {
     console.log("Default admin user created:");
     console.log("Username: admin");
     console.log("Password: " + adminPassword);
+  }
+
+  if ((await BlogModel.countDocuments().exec()) === 0) {
+    await BlogModel.create({
+      title: "Hello World!",
+      author: "Ben Siebert",
+      content: "# Hello World!\n\nThis is a test blog post.",
+      tags: ["test", "hello", "world"],
+      image:
+        "https://www.jugend-forscht.de/fileadmin/_processed_/2/f/csm_2023_ARB_008_download_f8f39dd0a0.jpg",
+    });
   }
 
   const server = express();

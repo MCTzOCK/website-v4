@@ -14,17 +14,43 @@ import {
   Button,
   ButtonGroup,
   chakra,
+  CircularProgress,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   Image,
+  Link,
   Stack,
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
 import LandingPageText from "@/components/LandingPageText";
+import { Blog } from "@/types/Blog";
+import BlogCard from "@/components/BlogCard";
 
 export default function Index() {
   const isMobile = useMediaQuery("(max-width: 1080px)")[0];
+
+  const [blogError, setBlogError] = React.useState<boolean>(false);
+  const [blogLoading, setBlogLoading] = React.useState<boolean>(true);
+  const [blogs, setBlogs] = React.useState<Blog[]>([]);
+
+  React.useEffect(() => {
+    fetch("/api/blog", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        setBlogError(true);
+      }
+
+      setBlogs(data.blogs);
+      setBlogLoading(false);
+    });
+  }, []);
+
   return (
     <>
       {!isMobile ? (
@@ -75,14 +101,121 @@ export default function Index() {
         </>
       )}
       <Box
-        minH={"30vh"}
+        minH={"70vh"}
         zIndex={2}
         backgroundImage={"url('/static/images/waves.svg')"}
         backgroundSize={"cover"}
       ></Box>
-      <Heading textAlign={"center"} size={"2xl"}>
-        Latest News
-      </Heading>
+      <Box transform={"translate(0,-60vh)"} mb={"-20vh"}>
+        <Heading textAlign={"center"} size={"2xl"}>
+          Latest News
+        </Heading>
+        {blogLoading ? (
+          <Flex alignItems={"center"} justifyContent={"center"} pt={8} pb={8}>
+            <CircularProgress
+              isIndeterminate={true}
+              colorScheme={"primary"}
+              size={24}
+            />
+          </Flex>
+        ) : (
+          <>
+            {blogError ? (
+              <>
+                <Heading
+                  textAlign={"center"}
+                  size={"lg"}
+                  color={"red.500"}
+                  pt={8}
+                  pb={8}
+                >
+                  Error while loading news
+                </Heading>
+              </>
+            ) : (
+              <>
+                <Grid
+                  templateColumns={[
+                    "1fr",
+                    "1fr",
+                    "1fr 1fr",
+                    "1fr 1fr",
+                    "1fr 1fr 1fr",
+                    "1fr 1fr 1fr",
+                  ]}
+                  gap={8}
+                  p={8}
+                >
+                  {blogs.map((blog) => {
+                    return (
+                      <>
+                        <GridItem w={"100%"}>
+                          <BlogCard blog={blog} key={blog._id} />
+                        </GridItem>
+                      </>
+                    );
+                  })}
+                </Grid>
+              </>
+            )}
+          </>
+        )}
+      </Box>
+      <Box transform={"translate(0,-30vh)"} w={"100%"}>
+        <Heading textAlign={"center"} size={"2xl"}>
+          Open Source
+        </Heading>
+        <Flex
+          justifyContent={"center"}
+          w={"100%"}
+          alignItems={"center"}
+          flexDirection={"column"}
+          gap={16}
+        >
+          <Stack gap={4} pb={8} pt={8}>
+            <Text fontSize={"xl"}>Many of my code is</Text>
+            <Heading size={"2xl"} color={"primary.600"}>
+              open-source
+            </Heading>
+            <Text fontSize={"xl"}>
+              <chakra.span>because I&nbsp;</chakra.span>
+              <chakra.span fontSize={"2xl"} color={"primary.400"}>
+                highly believe
+              </chakra.span>
+              <chakra.span>&nbsp;in&nbsp;</chakra.span>
+              <chakra.span fontSize={"2xl"} color={"primary.400"}>
+                open-source
+              </chakra.span>
+              .
+            </Text>
+            <Text fontSize={"xl"}>
+              <chakra.span>If you want to&nbsp;</chakra.span>
+              <chakra.span fontSize={"2xl"} color={"primary.400"}>
+                take a look at my work
+              </chakra.span>
+              <chakra.span>&nbsp;you can visit my&nbsp;</chakra.span>
+              <chakra.span fontSize={"2xl"} color={"primary.400"}>
+                GitHub Profile
+              </chakra.span>
+              <chakra.span>&nbsp;at&nbsp;</chakra.span>
+              <chakra.span fontSize={"2xl"} color={"primary.400"}>
+                <Link
+                  href={"https://github.com/MCTzOCK"}
+                  isExternal={true}
+                  color={"primary.400"}
+                >
+                  https://github.com/MCTzOCK
+                </Link>
+              </chakra.span>
+            </Text>
+          </Stack>
+          <Image
+            src={"/static/images/opensource.svg"}
+            transform={"translate(0, 25%)"}
+            width={"600"}
+          />
+        </Flex>
+      </Box>
     </>
   );
 }
