@@ -9,22 +9,16 @@
  */
 
 import * as React from "react";
+import { createRef } from "react";
 import {
+  Button,
+  Flex,
   Link,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
-  Button,
-  Portal,
-  Box,
+  PopoverContent,
+  PopoverTrigger,
   Stack,
-  Flex,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
@@ -32,12 +26,9 @@ import {
   FaBoxes,
   FaChevronDown,
   FaChevronUp,
-  FaFile,
   FaTools,
   FaUser,
 } from "react-icons/fa";
-import BrandAppImage from "@/components/BrandAppImage";
-import { createRef } from "react";
 import AppImageWrapper from "@/components/AppImageWrapper";
 import { Image } from "@chakra-ui/image";
 
@@ -86,15 +77,6 @@ export default function NavigationBarItems() {
           icon: (
             <>
               <FaTools />
-            </>
-          ),
-        },
-        {
-          name: "Blog",
-          href: "/about/blog",
-          icon: (
-            <>
-              <FaFile />
             </>
           ),
         },
