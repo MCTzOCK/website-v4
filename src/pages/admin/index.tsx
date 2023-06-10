@@ -43,7 +43,14 @@ import {
   InputLeftElement,
   Input,
 } from "@chakra-ui/react";
-import { FaImage, FaPen, FaTags, FaTrash, FaUser } from "react-icons/fa";
+import {
+  FaImage,
+  FaPen,
+  FaPlus,
+  FaTags,
+  FaTrash,
+  FaUser,
+} from "react-icons/fa";
 import { Button } from "@chakra-ui/react";
 import UploadImageComponent from "@/components/UploadImageComponent";
 import Editor from "@monaco-editor/react";
@@ -115,7 +122,32 @@ export default function Index() {
           mt={4}
         >
           <Box mt={4} flex={"100%"} w={"100%"}>
-            <Heading size={"xl"}>Blog</Heading>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              direction={["column", "row"]}
+            >
+              <Heading size={"xl"}>Blog</Heading>
+              <Button
+                leftIcon={<FaPlus />}
+                colorScheme={"primary"}
+                onClick={async () => {
+                  const res = await fetch("/api/blog/create", {
+                    method: "POST",
+                  });
+
+                  if (res.status === 200) {
+                    const data = await res.json();
+                    setCurrentBlog(data.blog);
+                    onBlogOpen();
+                  } else {
+                    alert("Error while creating blog!");
+                  }
+                }}
+              >
+                Create
+              </Button>
+            </Flex>
             <TableContainer>
               <Table>
                 <Thead>
