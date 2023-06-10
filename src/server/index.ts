@@ -17,7 +17,10 @@ import mongoConnect from "../lib/mongoConnect";
 import UserModel from "../lib/models/UserModel";
 import * as crypto from "crypto";
 import BlogModel from "../lib/models/BlogModel";
-
+import mongoose from "mongoose";
+import formidable from "formidable";
+import * as fs from "fs";
+import { randomBytes } from "crypto";
 const dev = process.env.NODE_ENV !== "production";
 
 const app = next({ dev });
@@ -64,7 +67,90 @@ app.prepare().then(async () => {
     });
   }
 
+  const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "images",
+  });
+
   const server = express();
+
+  server.post("/api/upload-image", async (req, res) => {
+    const form = new formidable.IncomingForm();
+
+    await new Promise((resolve, reject) => {
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          res.status(500).json({
+            error: JSON.stringify(err),
+          });
+          return;
+        }
+
+        const file = files.image as formidable.File;
+
+        if (!file) {
+          res.status(400).json({
+            error: "No image provided",
+          });
+          return;
+        }
+
+        const content = fs.readFileSync(file.filepath);
+        const fileName = file.originalFilename as string;
+
+        const uploadStream = bucket.openUploadStream(
+          randomBytes(128).toString("hex") +
+            "." +
+            (fileName as string).split(".").pop()
+        );
+
+        uploadStream.write(content);
+
+        uploadStream.end();
+
+        await new Promise((resolve0) => {
+          uploadStream.on("finish", () => {
+            resolve0(true);
+          });
+        });
+
+        res.status(200).json({
+          success: true,
+          url: "/api/image/" + uploadStream.id,
+        });
+
+        resolve(true);
+      });
+    });
+
+    /*
+
+    if (!(req.files && req.files.image)) {
+      res.status(400).json({
+        error: "No image uploaded",
+      });
+      return;
+    }
+
+    const image = req.files.image as fileUpload.UploadedFile;
+    */
+  });
+
+  server.get("/api/image/*", (req, res) => {
+    const id = req.url.split("/").pop();
+    if (!id) {
+      res.status(400).json({
+        error: "No image id provided",
+      });
+      return;
+    }
+
+    res.setHeader("Content-Type", "image/png");
+
+    const downloadStream = bucket.openDownloadStream(
+      new mongoose.Types.ObjectId(id)
+    );
+    downloadStream.pipe(res);
+  });
 
   server.all("*", (req, res) => {
     return handle(req, res);

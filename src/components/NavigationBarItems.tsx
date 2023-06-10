@@ -135,7 +135,7 @@ export default function NavigationBarItems() {
           icon: <Image src={"/static/images/decryptor.jpg"} w={14} />,
         },
         {
-          name: "Side Projects",
+          name: "All",
           href: "/projects",
           icon: <FaBoxes />,
         },
@@ -184,7 +184,7 @@ export default function NavigationBarItems() {
                   <PopoverContent
                     bg={"black"}
                     w={["90vmin", "fit-content"]}
-                    minWidth={"30vmin"}
+                    minWidth={"40vmin"}
                     h={"fit-content"}
                     overflow={"auto"}
                     maxH={"40vh"}
