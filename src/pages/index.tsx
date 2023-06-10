@@ -100,13 +100,7 @@ export default function Index() {
           </Flex>
         </>
       )}
-      <Box
-        minH={"70vh"}
-        zIndex={2}
-        backgroundImage={"url('/static/images/waves.svg')"}
-        backgroundSize={"cover"}
-      ></Box>
-      <Box transform={"translate(0,-60vh)"} mb={"-20vh"}>
+      <Box mt={8}>
         <Heading textAlign={"center"} size={"2xl"}>
           Latest News
         </Heading>
@@ -161,7 +155,7 @@ export default function Index() {
           </>
         )}
       </Box>
-      <Box transform={"translate(0,-30vh)"} w={"100%"}>
+      <Box w={"100%"} mb={8}>
         <Heading textAlign={"center"} size={"2xl"}>
           Open Source
         </Heading>
@@ -209,11 +203,7 @@ export default function Index() {
               </chakra.span>
             </Text>
           </Stack>
-          <Image
-            src={"/static/images/opensource.svg"}
-            transform={"translate(0, 25%)"}
-            width={"600"}
-          />
+          <Image src={"/static/images/opensource.svg"} width={"600"} />
         </Flex>
       </Box>
     </>

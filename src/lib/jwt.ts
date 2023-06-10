@@ -12,6 +12,6 @@ import jwt from "jsonwebtoken";
 
 export default function createJwt(username: string): string {
   return jwt.sign({ username }, process.env.JWT_SECRET as string, {
-    expiresIn: "1d",
+    expiresIn: "30d",
   });
 }
