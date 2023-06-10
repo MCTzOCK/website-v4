@@ -29,6 +29,7 @@ export default function BlogCard(props: { blog: Blog }) {
     <>
       <Box
         w={"100%"}
+        h={"100%"}
         backgroundColor={"black"}
         rounded={"xl"}
         border={"1px solid white"}
