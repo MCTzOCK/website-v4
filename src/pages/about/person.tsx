@@ -35,8 +35,7 @@ export default function Person() {
           <Image
             src={"/static/images/ben4.png"}
             alt={"Ben"}
-            rounded={"full"}
-            objectFit={"cover"}
+            objectFit={"contain"}
           />
           <Box w={"100%"}>
             <Heading textAlign={"center"}>Ben Siebert</Heading>

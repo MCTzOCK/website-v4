@@ -1,5 +1,5 @@
 /**
- * src/components/EmailAdminNewContact.tsx
+ * src/components/EmailContactMessage.tsx
  *
  * Author: Ben Siebert <hello@ben-siebert.de>
  * Copyright: Copyright (c) 2018-2023 Ben Siebert. All rights reserved.
@@ -27,17 +27,11 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export default function EmailAdminNewContact(props: {
-  subject: string;
-  message: string;
-  email: string;
-}) {
+export default function EmailContactMessage(props: { message: string }) {
   return (
     <Html>
       <Head />
-      <Preview>
-        New Contact Request from {props.email} with subject {props.subject}
-      </Preview>
+      <Preview>Answer to your contact request.</Preview>
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
@@ -51,16 +45,16 @@ export default function EmailAdminNewContact(props: {
               />
             </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              New <strong>Contact Request</strong>
+              Answer to your <strong>Contact Request</strong>
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              E-Mail: {props.email}
+              Hello!
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              Subject: {props.subject}
+              {props.message}
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              Message: {props.message}
+              Best regards, Ben Siebert
             </Text>
           </Container>
         </Body>

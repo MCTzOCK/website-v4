@@ -15,6 +15,11 @@ const ContactModel = new mongoose.Schema({
     type: String,
     required: true,
   },
+  answered: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   subject: {
     type: String,
     required: true,

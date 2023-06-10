@@ -44,10 +44,13 @@ import {
   Input,
 } from "@chakra-ui/react";
 import {
+  FaCheck,
+  FaEnvelope,
   FaImage,
   FaPen,
   FaPlus,
   FaTags,
+  FaTimes,
   FaTrash,
   FaUser,
 } from "react-icons/fa";
@@ -55,10 +58,12 @@ import { Button } from "@chakra-ui/react";
 import UploadImageComponent from "@/components/UploadImageComponent";
 import Editor from "@monaco-editor/react";
 import { useRef } from "react";
+import { ContactMessage } from "@/types/ContactMessage";
 
 export default function Index() {
-  const [blogError, setBlogError] = React.useState<boolean>(false);
-  const [blogLoading, setBlogLoading] = React.useState<boolean>(true);
+  const [contactMessages, setContactMessages] = React.useState<
+    ContactMessage[]
+  >([]);
   const [blogs, setBlogs] = React.useState<Blog[]>([]);
 
   const authState = useAuthState();
@@ -74,6 +79,7 @@ export default function Index() {
 
   React.useEffect(() => {
     reloadBlogs();
+    reloadCMs();
   }, []);
 
   const reloadBlogs = async () => {
@@ -82,15 +88,22 @@ export default function Index() {
     }).then(async (res) => {
       const data = await res.json();
 
-      if (res.status !== 200) {
-        setBlogError(true);
-      }
-
       setBlogs(data.blogs);
-      setBlogLoading(false);
     });
   };
 
+  const reloadCMs = async () => {
+    fetch("/api/contact/get", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+
+      setContactMessages(data.contacts);
+    });
+  };
+
+  const [currentContact, setCurrentContact] =
+    React.useState<ContactMessage>(null);
   const [currentBlog, setCurrentBlog] = React.useState<Blog>(null);
   const {
     isOpen: isBlogOpen,
@@ -215,6 +228,78 @@ export default function Index() {
           </Box>
           <Box mt={4} flex={"100%"} w={"100%"}>
             <Heading size={"xl"}>Messages</Heading>
+            <TableContainer>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Date</Th>
+                    <Th>E-Mail</Th>
+                    <Th>Subject</Th>
+                    <Th>Message</Th>
+                    <Th>Answered</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {contactMessages
+                    .sort((a, b) => {
+                      if (a.answered && !b.answered) {
+                        return 1;
+                      } else if (!a.answered && b.answered) {
+                        return -1;
+                      } else {
+                        return 0;
+                      }
+                    })
+                    .map((cm) => {
+                      return (
+                        <>
+                          <Tr>
+                            <Td>{new Date(cm.created).toLocaleString()}</Td>
+                            <Td>{cm.email}</Td>
+                            <Td>{cm.subject}</Td>
+                            <Td>{cm.message}</Td>
+                            <Td>{cm.answered ? <FaCheck /> : <FaTimes />}</Td>
+                            <Td>
+                              <IconButton
+                                aria-label={"Answer"}
+                                icon={<FaEnvelope />}
+                                colorScheme={"primary"}
+                                isDisabled={cm.answered}
+                                onClick={async () => {
+                                  const text = prompt(
+                                    "Enter the answer to the message"
+                                  );
+
+                                  if (!text) return;
+
+                                  const res = await fetch(
+                                    "/api/contact/" + cm._id + "/answer",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        message: text,
+                                      }),
+                                    }
+                                  );
+
+                                  if (res.status === 200) {
+                                    reloadCMs();
+                                  }
+                                }}
+                              />
+                            </Td>
+                          </Tr>
+                        </>
+                      );
+                    })}
+                </Tbody>
+                <TableCaption>{blogs.length} Blogs published.</TableCaption>
+              </Table>
+            </TableContainer>
           </Box>
         </Flex>
       </Box>
