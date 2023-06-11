@@ -17,6 +17,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -38,7 +39,14 @@ export default function Contact() {
         h={"fit-content"}
         alignItems={"center"}
         justifyContent={"center"}
+        direction={["column", "row"]}
+        gap={16}
       >
+        <Image
+          src={"/static/images/ben4.png"}
+          alt={"Ben"}
+          objectFit={"contain"}
+        />
         <Box
           w={["100%", "25%"]}
           p={8}
