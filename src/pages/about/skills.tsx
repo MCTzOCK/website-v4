@@ -19,6 +19,8 @@ import {
   Heading,
   Stack,
 } from "@chakra-ui/react";
+import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function Skills() {
   const [skills, setSkills] = React.useState<Skill[]>([]);
@@ -33,6 +35,34 @@ export default function Skills() {
 
   return (
     <>
+      <Head>
+        <title>Skills - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Skills - Ben Siebert"}
+        description={"All the skills Ben Siebert has obtained."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Skills - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "All the skills Ben Siebert has obtained.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Box p={8}>
         <Heading color="primary.600" size={"2xl"} textAlign={"center"}>
           Skills

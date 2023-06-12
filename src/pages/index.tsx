@@ -11,8 +11,6 @@
 import * as React from "react";
 import {
   Box,
-  Button,
-  ButtonGroup,
   chakra,
   CircularProgress,
   Flex,
@@ -28,6 +26,8 @@ import {
 import LandingPageText from "@/components/LandingPageText";
 import { Blog } from "@/types/Blog";
 import BlogCard from "@/components/BlogCard";
+import { NextSeo } from "next-seo";
+import Head from "next/head";
 
 export default function Index() {
   const isMobile = useMediaQuery("(max-width: 1080px)")[0];
@@ -53,6 +53,38 @@ export default function Index() {
 
   return (
     <>
+      <Head>
+        <title>Home - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Home - Ben Siebert"}
+        description={
+          "Ben Siebert is a professional software developer and student from Germany."
+        }
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Home - Ben Siebert",
+          siteName: "Ben Siebert",
+          description:
+            "Ben Siebert is a professional software developer and student from Germany.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
+
       {!isMobile ? (
         <Flex
           direction={["column", "row"]}

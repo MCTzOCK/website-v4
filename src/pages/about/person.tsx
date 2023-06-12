@@ -21,10 +21,39 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import Head from "next/head";
 
 export default function Person() {
   return (
     <>
+      <Head>
+        <title>Person - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Person - Ben Siebert"}
+        description={"Find out who Ben Siebert is."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Person - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "Find out who Ben Siebert is.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Flex
         alignItems={"center"}
         justifyContent={"center"}

@@ -32,6 +32,8 @@ import {
 import { PromotedProject } from "@/types/PromotedProject";
 import AppImageWrapper from "@/components/AppImageWrapper";
 import { FaCodeBranch, FaGithub, FaGlobe, FaStar } from "react-icons/fa";
+import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function Index() {
   const [projects, setProjects] = React.useState<
@@ -63,6 +65,34 @@ export default function Index() {
 
   return (
     <>
+      <Head>
+        <title>Projects - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Projects - Ben Siebert"}
+        description={"All open-source projects made by Ben Siebert."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Projects - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "All open-source projects made by Ben Siebert.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Flex p={8} justifyContent={"center"}>
         <Box w={["100%", "60%"]}>
           <Heading size={"2xl"}>Projects</Heading>

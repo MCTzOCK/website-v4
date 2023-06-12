@@ -26,6 +26,8 @@ import {
 } from "@chakra-ui/react";
 import { FaEnvelope, FaPen } from "react-icons/fa";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function Contact() {
   const [disabled, setDisabled] = React.useState<boolean>(false);
@@ -33,6 +35,34 @@ export default function Contact() {
 
   return (
     <>
+      <Head>
+        <title>Contact - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Contact - Ben Siebert"}
+        description={"Contact Ben Siebert via the contact form."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Contact - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "Contact Ben Siebert via the contact form.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Flex
         w={"100%"}
         minH={"100vh"}

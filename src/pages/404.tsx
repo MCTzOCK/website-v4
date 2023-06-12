@@ -10,10 +10,40 @@
 
 import * as React from "react";
 import { Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function NotFound() {
   return (
     <>
+      <Head>
+        <title>404 - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"404 - Ben Siebert"}
+        description={"This subpage could not be found."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "404 - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "This subpage could not be found.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Flex
         w={"100%"}
         h={"100vh"}

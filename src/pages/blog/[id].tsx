@@ -32,6 +32,7 @@ import {
 import { useRouter } from "next/router";
 import { FaClock, FaTags, FaUser } from "react-icons/fa";
 import Markdown from "markdown-to-jsx";
+import Head from "next/head";
 
 export default function BlogViewer() {
   const [blog, setBlog] = React.useState<Blog>(null);
@@ -50,6 +51,34 @@ export default function BlogViewer() {
   if (!blog) {
     return (
       <>
+        <Head>
+          <title>Blog - Ben Siebert</title>
+        </Head>
+        <NextSeo
+          title={"Blog - Ben Siebert"}
+          description={"Read on the blog of Ben Siebert."}
+          openGraph={{
+            type: "website",
+            url: "https://ben-siebert.com/",
+            title: "Blog - Ben Siebert",
+            siteName: "Ben Siebert",
+            description: "Read on the blog of Ben Siebert.",
+            images: [
+              {
+                url: "https://ben-siebert.com/static/images/ben4.png",
+                width: 482,
+                height: 581,
+                alt: "Ben Siebert",
+                type: "image/png",
+              },
+            ],
+          }}
+          twitter={{
+            handle: "@OfficialMCTzOCK",
+            site: "@OfficialMCTzOCK",
+            cardType: "summary_large_image",
+          }}
+        />
         <Flex
           w={"100%"}
           h={"100vh"}

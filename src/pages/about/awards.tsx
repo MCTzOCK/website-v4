@@ -13,6 +13,7 @@ import { Box, Flex, Heading, Image, Stack } from "@chakra-ui/react";
 import Milestones from "@/components/Milestones";
 import { useEffect, useState } from "react";
 import { Award } from "../../types/Award";
+import Head from "next/head";
 
 export default function Awards() {
   const [awards, setAwards] = useState<Award[]>([]);
@@ -28,6 +29,34 @@ export default function Awards() {
 
   return (
     <>
+      <Head>
+        <title>Awards - Ben Siebert</title>
+      </Head>
+      <NextSeo
+        title={"Awards - Ben Siebert"}
+        description={"All the awards Ben Siebert has won."}
+        openGraph={{
+          type: "website",
+          url: "https://ben-siebert.com/",
+          title: "Awards - Ben Siebert",
+          siteName: "Ben Siebert",
+          description: "All the awards Ben Siebert has won.",
+          images: [
+            {
+              url: "https://ben-siebert.com/static/images/ben4.png",
+              width: 482,
+              height: 581,
+              alt: "Ben Siebert",
+              type: "image/png",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@OfficialMCTzOCK",
+          site: "@OfficialMCTzOCK",
+          cardType: "summary_large_image",
+        }}
+      />
       <Box w={"100%"} h={"fit-content"} minH={"100vh"} mt={8} p={8}>
         <Flex
           direction={["column", "row"]}
