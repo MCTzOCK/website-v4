@@ -60,7 +60,7 @@ export default function Skills() {
                       size={32}
                       max={5}
                     >
-                      <CircularProgressLabel fontSize={"2xl"}>
+                      <CircularProgressLabel fontSize={"lg"}>
                         {
                           [
                             "Beginner",
