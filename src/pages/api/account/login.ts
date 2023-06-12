@@ -60,7 +60,7 @@ export default async function handleRequest(
       success: true,
       token: createJwt(req.body.username),
     });
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).json({
       error: e.toString(),
     });

@@ -140,7 +140,7 @@ export default function NavigationBarItems() {
 
       const newItems = items.map((item) => {
         if (item.type === "menu" && item.name === "Projects") {
-          item.menuItems = projects.map((project) => {
+          item.menuItems = projects.map((project: any) => {
             return {
               name: project.name,
               href: project.website,
@@ -148,7 +148,7 @@ export default function NavigationBarItems() {
             };
           });
 
-          item.menuItems.push({
+          item.menuItems!.push({
             name: "All",
             href: "/projects",
             icon: <FaBoxes />,

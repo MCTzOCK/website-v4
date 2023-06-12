@@ -38,8 +38,7 @@ export default async function handleRequest(
     res.status(200).json({
       awards,
     });
-  } catch (e) {
-    throw e;
+  } catch (e: any) {
     res.status(500).json({
       error: e.toString(),
     });

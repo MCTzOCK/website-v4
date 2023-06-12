@@ -33,9 +33,10 @@ import { useRouter } from "next/router";
 import { FaClock, FaTags, FaUser } from "react-icons/fa";
 import Markdown from "markdown-to-jsx";
 import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function BlogViewer() {
-  const [blog, setBlog] = React.useState<Blog>(null);
+  const [blog, setBlog] = React.useState<Blog>();
   const router = useRouter();
 
   React.useEffect(() => {

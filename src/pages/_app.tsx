@@ -22,7 +22,7 @@ export default function App(props: AppProps) {
 
   React.useEffect(() => {
     if (document && document.getElementById("navbar")) {
-      setNavbarHeight(document.getElementById("navbar").clientHeight);
+      setNavbarHeight(document!.getElementById("navbar")!.clientHeight);
     }
   }, []);
 

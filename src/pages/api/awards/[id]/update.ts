@@ -91,7 +91,7 @@ export default async function handleRequest(
     res.status(200).json({
       success: true,
     });
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).json({
       error: "Internal server error",
     });

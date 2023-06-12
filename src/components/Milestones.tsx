@@ -43,6 +43,7 @@ const Milestones = (props: {
     date: string;
     title: string;
     description: string;
+    project: PromotedProject;
     [key: string]: any;
   }[] = props.milestones.map((m) => {
     return {

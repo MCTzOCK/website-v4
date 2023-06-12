@@ -41,7 +41,7 @@ export default function Index() {
       name: string;
       full_name: string;
       html_url: string;
-      description;
+      description: string;
       stargazers_count: number;
       forks_count: number;
     }[]

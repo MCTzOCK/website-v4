@@ -146,11 +146,10 @@ export default function Index() {
     });
   };
 
-  const [currentProject, setCurrentProject] =
-    React.useState<PromotedProject>(null);
-  const [currentBlog, setCurrentBlog] = React.useState<Blog>(null);
-  const [currentAward, setCurrentAward] = React.useState<Award>(null);
-  const [currentSkill, setCurrentSkill] = React.useState<Skill>(null);
+  const [currentProject, setCurrentProject] = React.useState<PromotedProject>();
+  const [currentBlog, setCurrentBlog] = React.useState<Blog>();
+  const [currentAward, setCurrentAward] = React.useState<Award>();
+  const [currentSkill, setCurrentSkill] = React.useState<Skill>();
 
   const {
     isOpen: isBlogOpen,
@@ -180,7 +179,7 @@ export default function Index() {
 
   const editorRef = useRef(null);
 
-  const handleEditorDidMount = (editor, monaco) => {
+  const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
   };
 
@@ -486,7 +485,7 @@ export default function Index() {
                 leftIcon={<FaPlus />}
                 colorScheme={"primary"}
                 onClick={async () => {
-                  const res = await fetch("/api/projects/awards", {
+                  const res = await fetch("/api/awards/create", {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
@@ -711,7 +710,9 @@ export default function Index() {
 
                   const image = currentBlog.image;
 
-                  const content = editorRef.current.getValue();
+                  const content = (
+                    (editorRef as any).current as any
+                  ).getValue();
 
                   const update = {
                     title,
@@ -800,12 +801,13 @@ export default function Index() {
                         rounded={"xl"}
                         cursor={"pointer"}
                         onClick={async () => {
+                          // @ts-ignore
                           isNaN["__bensiebert_upload_image"] = (
                             url: string
                           ) => {
                             setCurrentBlog((blog) => {
                               if (typeof url === "string") {
-                                blog.image = url;
+                                blog!.image = url;
                               }
                               return blog;
                             });
@@ -961,12 +963,13 @@ export default function Index() {
                         rounded={"xl"}
                         cursor={"pointer"}
                         onClick={async () => {
+                          // @ts-ignore
                           isNaN["__bensiebert_upload_image"] = (
                             url: string
                           ) => {
                             setCurrentProject((project) => {
                               if (typeof url === "string") {
-                                project.image = url;
+                                project!.image = url;
                               }
                               return project;
                             });
@@ -1145,6 +1148,7 @@ export default function Index() {
           onClose={onIMGUploadClose}
           // @ts-ignore
           callback={
+            // @ts-ignore
             isNaN ? isNaN["__bensiebert_upload_image"] : (url: string) => {}
           }
         />

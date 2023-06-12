@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function Person() {
   return (

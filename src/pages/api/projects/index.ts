@@ -21,7 +21,7 @@ export default async function handleRequest(
     res.status(200).json({
       projects: await PromotedProjectModel.find(),
     });
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).json({
       error: e.toString(),
     });

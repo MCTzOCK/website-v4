@@ -140,6 +140,7 @@ export default function Index() {
           <Flex alignItems={"center"} justifyContent={"center"} pt={8} pb={8}>
             <CircularProgress
               isIndeterminate={true}
+              // @ts-ignore
               colorScheme={"primary"}
               size={24}
             />

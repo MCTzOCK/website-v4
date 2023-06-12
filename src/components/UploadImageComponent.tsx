@@ -25,6 +25,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { FaImage } from "react-icons/fa";
+import { createRef } from "react";
 
 export default function UploadImageComponent(props: {
   isOpen: boolean;
@@ -33,7 +34,11 @@ export default function UploadImageComponent(props: {
 }) {
   return (
     <>
-      <AlertDialog isOpen={props.isOpen} onClose={props.onClose}>
+      <AlertDialog
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        leastDestructiveRef={createRef()}
+      >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
