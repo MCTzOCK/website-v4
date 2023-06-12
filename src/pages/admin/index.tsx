@@ -66,6 +66,7 @@ import { useRef } from "react";
 import { ContactMessage } from "@/types/ContactMessage";
 import { PromotedProject } from "@/types/PromotedProject";
 import { Award } from "@/types/Award";
+import { Skill } from "@/types/Skill";
 
 export default function Index() {
   const [contactMessages, setContactMessages] = React.useState<
@@ -74,6 +75,7 @@ export default function Index() {
   const [blogs, setBlogs] = React.useState<Blog[]>([]);
   const [projects, setProjects] = React.useState<PromotedProject[]>([]);
   const [awards, setAwards] = React.useState<Award[]>([]);
+  const [skills, setSkills] = React.useState<Skill[]>([]);
 
   const authState = useAuthState();
   const router = useRouter();
@@ -91,6 +93,7 @@ export default function Index() {
     reloadCMs();
     reloadProjects();
     reloadAwards();
+    reloadSkills();
   }, []);
 
   const reloadBlogs = async () => {
@@ -133,10 +136,21 @@ export default function Index() {
     });
   };
 
+  const reloadSkills = async () => {
+    fetch("/api/skills", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+
+      setSkills(data.skills);
+    });
+  };
+
   const [currentProject, setCurrentProject] =
     React.useState<PromotedProject>(null);
   const [currentBlog, setCurrentBlog] = React.useState<Blog>(null);
   const [currentAward, setCurrentAward] = React.useState<Award>(null);
+  const [currentSkill, setCurrentSkill] = React.useState<Skill>(null);
 
   const {
     isOpen: isBlogOpen,
@@ -148,17 +162,20 @@ export default function Index() {
     onOpen: onIMGUploadOpen,
     onClose: onIMGUploadClose,
   } = useDisclosure();
-
   const {
     isOpen: isProjectOpen,
     onOpen: onProjectOpen,
     onClose: onProjectClose,
   } = useDisclosure();
-
   const {
     isOpen: isAwardOpen,
     onOpen: onAwardOpen,
     onClose: onAwardClose,
+  } = useDisclosure();
+  const {
+    isOpen: isSkillOpen,
+    onOpen: onSkillOpen,
+    onClose: onSkillClose,
   } = useDisclosure();
 
   const editorRef = useRef(null);
@@ -544,6 +561,119 @@ export default function Index() {
                   })}
                 </Tbody>
                 <TableCaption>{awards.length} Awards total.</TableCaption>
+              </Table>
+            </TableContainer>
+          </Box>
+          <Box mt={4} flex={"100%"} w={"100%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              direction={["column", "row"]}
+            >
+              <Heading size={"xl"}>Skills</Heading>
+              <Button
+                leftIcon={<FaPlus />}
+                colorScheme={"primary"}
+                onClick={async () => {
+                  const name = prompt("Skill Name");
+                  if (!name) return;
+                  const level = prompt("Skill Level (1-5)");
+                  if (!level) return;
+
+                  const res = await fetch("/api/skills/create", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name,
+                      level,
+                    }),
+                  });
+
+                  reloadSkills();
+
+                  if (res.status === 200) {
+                    const data = await res.json();
+                    setCurrentSkill(data.skill);
+                    onSkillOpen();
+                  } else {
+                    alert("Error while creating skill!");
+                  }
+                }}
+              >
+                Create
+              </Button>
+            </Flex>
+            <TableContainer>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Name</Th>
+                    <Th>Level</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {skills.map((skill) => {
+                    return (
+                      <>
+                        <Tr>
+                          <Td>{skill.name}</Td>
+                          <Td>{skill.level}</Td>
+                          <Td>
+                            <ButtonGroup>
+                              <IconButton
+                                aria-label={"Delete"}
+                                colorScheme={"red"}
+                                onClick={async () => {
+                                  fetch(
+                                    "/api/skills/" + skill._id + "/delete",
+                                    {
+                                      method: "DELETE",
+                                    }
+                                  ).then(() => {
+                                    reloadSkills();
+                                  });
+                                }}
+                                icon={<FaTrash />}
+                              />
+                              <IconButton
+                                aria-label={"edit"}
+                                colorScheme={"primary"}
+                                onClick={async () => {
+                                  const name = prompt("Skill Name");
+                                  const level = prompt("Skill Level (1-5)");
+                                  if (!name || !level) return;
+
+                                  const res = await fetch(
+                                    "/api/skills/" + skill._id + "/update",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        update: {
+                                          name,
+                                          level: parseInt(level),
+                                        },
+                                      }),
+                                    }
+                                  );
+
+                                  reloadSkills();
+                                }}
+                                icon={<FaPen />}
+                              />
+                            </ButtonGroup>
+                          </Td>
+                        </Tr>
+                      </>
+                    );
+                  })}
+                </Tbody>
+                <TableCaption>{skills.length} Skills total.</TableCaption>
               </Table>
             </TableContainer>
           </Box>
