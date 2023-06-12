@@ -34,7 +34,7 @@ export default function Footer() {
       <Box bg={"black"} p={16}>
         <Flex w={"100%"} justifyContent={"center"} alignItems={"flex-start"}>
           <Stack gap={6}>
-            <Flex alignItems={"center"} gap={4}>
+            <Flex alignItems={"center"} justifyContent={"center"} gap={4}>
               <BrandAppImage />
               <Box>
                 <Heading>Ben Siebert</Heading>
@@ -58,12 +58,8 @@ export default function Footer() {
               </Link>
             </ButtonGroup>
             <Flex alignItems={"center"} justifyContent={"center"} gap={4}>
-              <Link as={NextLink as any} href={"/legal/imprint"}>
-                Imprint
-              </Link>
-              <Link as={NextLink as any} href={"/legal/privacy-policy"}>
-                Privacy Policy
-              </Link>
+              Copyright &copy; {new Date().getFullYear()} Ben Siebert. All
+              rights reserved.
             </Flex>
           </Stack>
         </Flex>
