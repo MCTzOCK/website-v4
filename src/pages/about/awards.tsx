@@ -14,6 +14,7 @@ import Milestones from "@/components/Milestones";
 import { useEffect, useState } from "react";
 import { Award } from "../../types/Award";
 import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 export default function Awards() {
   const [awards, setAwards] = useState<Award[]>([]);
