@@ -21,6 +21,8 @@ import mongoose from "mongoose";
 import formidable from "formidable";
 import * as fs from "fs";
 import { randomBytes } from "crypto";
+import PromotedProjectModel from "../lib/models/PromotedProjectModel";
+import AwardModel from "../lib/models/AwardModel";
 const dev = process.env.NODE_ENV !== "production";
 
 const app = next({ dev });
@@ -64,6 +66,25 @@ app.prepare().then(async () => {
       tags: ["test", "hello", "world"],
       image:
         "https://www.jugend-forscht.de/fileadmin/_processed_/2/f/csm_2023_ARB_008_download_f8f39dd0a0.jpg",
+    });
+  }
+
+  if ((await PromotedProjectModel.countDocuments().exec()) === 0) {
+    await PromotedProjectModel.create({
+      name: "Example Project",
+      image: "/decryptor.jpg",
+      website: "https://ben-siebert.com",
+      description: "This is an example project.",
+      sourceCode: "https://github.com/MCTzOCK/website-v4",
+    });
+  }
+
+  if ((await AwardModel.countDocuments().exec()) === 0) {
+    await AwardModel.create({
+      date: new Date(),
+      project: (await PromotedProjectModel.find())[0]._id,
+      title: "Example Award",
+      description: "This is an example award.",
     });
   }
 

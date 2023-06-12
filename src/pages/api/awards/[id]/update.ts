@@ -1,18 +1,18 @@
 /**
- * src/pages/api/blog/create.ts
+ * src/pages/api/awards/[id]/update.ts
  *
  * Author: Ben Siebert <hello@ben-siebert.de>
  * Copyright: Copyright (c) 2018-2023 Ben Siebert. All rights reserved.
  * License: Project License
- * Created At: 10.06.2023
+ * Created At: 12.06.2023
  *
  */
-
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoConnect from "@/lib/mongoConnect";
 import jwt from "jsonwebtoken";
 import UserModel from "@/lib/models/UserModel";
-import BlogModel from "@/lib/models/BlogModel";
+import PromotedProjectModel from "@/lib/models/PromotedProjectModel";
+import AwardModel from "@/lib/models/AwardModel";
 
 export default async function handleRequest(
   req: NextApiRequest,
@@ -52,19 +52,46 @@ export default async function handleRequest(
       return;
     }
 
-    const blog = await BlogModel.create({
-      title: "New Blog",
-      author: "Ben Siebert",
-      tags: ["new", "blog"],
-      content: "# This is a new blog",
-      image: "/static/images/ben.png",
-    });
+    if (!req.body || !req.body.update) {
+      res.status(400).json({
+        error: "Bad request",
+      });
+      return;
+    }
+
+    const award = await AwardModel.findById(req.query.id);
+
+    if (!award) {
+      res.status(404).json({
+        error: "Not found",
+      });
+      return;
+    }
+
+    const updatableKeys = ["date", "project", "title", "description"];
+
+    for (let key of updatableKeys) {
+      if (req.body.update[key]) {
+        if (key === "project") {
+          const project = await PromotedProjectModel.findById(
+            req.body.update[key]
+          );
+
+          if (!project) {
+            continue;
+          }
+        }
+
+        award[key] = req.body.update[key];
+      }
+    }
+
+    await award.save();
 
     res.status(200).json({
       success: true,
-      blog,
     });
-  } catch (e: any) {
+  } catch (e) {
     res.status(500).json({
       error: "Internal server error",
     });

@@ -33,17 +33,19 @@ import AppImageWrapper from "@/components/AppImageWrapper";
 import { Image } from "@chakra-ui/image";
 
 export default function NavigationBarItems() {
-  const items: {
-    name: string;
-    href?: string;
-    type: "link" | "menu";
-    menuItems?: {
+  const [items, setItems] = React.useState<
+    {
       name: string;
-      href: string;
-      icon: React.ReactNode;
-    }[];
-    onClick?: () => void;
-  }[] = [
+      href?: string;
+      type: "link" | "menu";
+      menuItems?: {
+        name: string;
+        href: string;
+        icon: React.ReactNode;
+      }[];
+      onClick?: () => void;
+    }[]
+  >([
     {
       name: "Home",
       href: "/",
@@ -128,7 +130,33 @@ export default function NavigationBarItems() {
       href: "/contact",
       type: "link",
     },
-  ];
+  ]);
+
+  React.useEffect(() => {
+    fetch("/api/projects", {
+      method: "GET",
+    }).then(async (res) => {
+      const projects = (await res.json()).projects;
+
+      const newItems = items.map((item) => {
+        if (item.type === "menu" && item.name === "Projects") {
+          item.menuItems = projects.map((project) => {
+            return {
+              name: project.name,
+              href: project.website,
+              icon: <Image src={project.image} w={14} />,
+            };
+          });
+
+          item.menuItems.push({
+            name: "All",
+            href: "/projects",
+            icon: <FaBoxes />,
+          });
+        }
+      });
+    });
+  }, []);
 
   return (
     <>

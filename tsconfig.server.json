@@ -7,7 +7,7 @@
     "isolatedModules": false,
     "noEmit": false
   },
-  "include": ["src/server/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "ts-node": {
     "transpileOnly": true,
     "module": "commonjs"

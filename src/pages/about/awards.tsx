@@ -11,8 +11,21 @@
 import * as React from "react";
 import { Box, Flex, Heading, Image, Stack } from "@chakra-ui/react";
 import Milestones from "@/components/Milestones";
+import { useEffect, useState } from "react";
+import { Award } from "../../types/Award";
 
 export default function Awards() {
+  const [awards, setAwards] = useState<Award[]>([]);
+
+  useEffect(() => {
+    fetch("/api/awards", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+      setAwards(data.awards);
+    });
+  }, []);
+
   return (
     <>
       <Box w={"100%"} h={"fit-content"} minH={"100vh"} mt={8} p={8}>
@@ -39,76 +52,14 @@ export default function Awards() {
               Awards
             </Heading>
             <Milestones
-              milestones={[
-                {
-                  date: "2023-05-21",
-                  title: "Participation (CodeUp)",
-                  description: "Bundeswettbewerb Jugend forscht",
-                },
-                {
-                  date: "2023-03-29",
-                  title: "Special Price (CodeUp)",
-                  description:
-                    "Teilnahme an der JugendUnternimmt summer school - Innovative Geschäftsideen mit Unternehmercourage",
-                },
-                {
-                  date: "2023-03-29",
-                  title: "1. Place (CodeUp)",
-                  description: "Landeswettbewerb Jugend forscht",
-                },
-                {
-                  date: "2023-02-24",
-                  title: "Special Price (CodeUp)",
-                  description: "Hengst-Filtration-Sonderpreis",
-                },
-                {
-                  date: "2023-02-24",
-                  title: "1. Place (CodeUp)",
-                  description: "Regionalwettbewerb Jugend forscht",
-                },
-                {
-                  date: "2022-05-07",
-                  title: "Special Price (InCode)",
-                  description:
-                    "Sonderpreis für die schöpferisch wertvollste Arbeit",
-                },
-                {
-                  date: "2022-05-07",
-                  title: "1. Place (InCode)",
-                  description: "Landeswettbewerb Schüler experimentieren",
-                },
-                {
-                  date: "2022-02-16",
-                  title: "Special Prize (InCode)",
-                  description:
-                    "Sonderpreis ct - Magazin für Computertechnik Jahresabonnement ",
-                },
-                {
-                  date: "2022-02-16",
-                  title: "1. Place (InCode)",
-                  description: "Regionalwettbewerb Schüler experimentieren",
-                },
-                {
-                  date: "2021-05-07",
-                  title: "Special Prize (SenOS)",
-                  description: "Sonderpreis Buchgutschein",
-                },
-                {
-                  date: "2021-05-07",
-                  title: "Participation (SenOS)",
-                  description: "Landeswettbewerb Schüler experimentieren",
-                },
-                {
-                  date: "2021-02-22",
-                  title: "1. Place (SenOS)",
-                  description: "Regionalwettbewerb Schüler experimentieren",
-                },
-                {
-                  date: "2020-02-19",
-                  title: "3. Place (Decryptor)",
-                  description: "Regionalwettbewerb Schüler experimentieren",
-                },
-              ]}
+              milestones={awards.map((award) => {
+                return {
+                  date: new Date(award.date).toDateString(),
+                  title: award.title,
+                  description: award.description,
+                  project: award.project,
+                };
+              })}
             />
           </Stack>
         </Flex>

@@ -42,10 +42,15 @@ import {
   InputGroup,
   InputLeftElement,
   Input,
+  Textarea,
+  Select,
 } from "@chakra-ui/react";
 import {
+  FaCalendar,
   FaCheck,
   FaEnvelope,
+  FaGithub,
+  FaGlobe,
   FaImage,
   FaPen,
   FaPlus,
@@ -59,12 +64,16 @@ import UploadImageComponent from "@/components/UploadImageComponent";
 import Editor from "@monaco-editor/react";
 import { useRef } from "react";
 import { ContactMessage } from "@/types/ContactMessage";
+import { PromotedProject } from "@/types/PromotedProject";
+import { Award } from "@/types/Award";
 
 export default function Index() {
   const [contactMessages, setContactMessages] = React.useState<
     ContactMessage[]
   >([]);
   const [blogs, setBlogs] = React.useState<Blog[]>([]);
+  const [projects, setProjects] = React.useState<PromotedProject[]>([]);
+  const [awards, setAwards] = React.useState<Award[]>([]);
 
   const authState = useAuthState();
   const router = useRouter();
@@ -80,6 +89,8 @@ export default function Index() {
   React.useEffect(() => {
     reloadBlogs();
     reloadCMs();
+    reloadProjects();
+    reloadAwards();
   }, []);
 
   const reloadBlogs = async () => {
@@ -102,9 +113,31 @@ export default function Index() {
     });
   };
 
-  const [currentContact, setCurrentContact] =
-    React.useState<ContactMessage>(null);
+  const reloadProjects = async () => {
+    fetch("/api/projects", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+
+      setProjects(data.projects);
+    });
+  };
+
+  const reloadAwards = async () => {
+    fetch("/api/awards", {
+      method: "GET",
+    }).then(async (res) => {
+      const data = await res.json();
+
+      setAwards(data.awards);
+    });
+  };
+
+  const [currentProject, setCurrentProject] =
+    React.useState<PromotedProject>(null);
   const [currentBlog, setCurrentBlog] = React.useState<Blog>(null);
+  const [currentAward, setCurrentAward] = React.useState<Award>(null);
+
   const {
     isOpen: isBlogOpen,
     onOpen: onBlogOpen,
@@ -114,6 +147,18 @@ export default function Index() {
     isOpen: isIMGUploadOpen,
     onOpen: onIMGUploadOpen,
     onClose: onIMGUploadClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isProjectOpen,
+    onOpen: onProjectOpen,
+    onClose: onProjectClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isAwardOpen,
+    onOpen: onAwardOpen,
+    onClose: onAwardClose,
   } = useDisclosure();
 
   const editorRef = useRef(null);
@@ -297,7 +342,208 @@ export default function Index() {
                       );
                     })}
                 </Tbody>
-                <TableCaption>{blogs.length} Blogs published.</TableCaption>
+                <TableCaption>
+                  {contactMessages.length} Messages total.
+                </TableCaption>
+              </Table>
+            </TableContainer>
+          </Box>
+          <Box mt={4} flex={"100%"} w={"100%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              direction={["column", "row"]}
+            >
+              <Heading size={"xl"}>Projects</Heading>
+              <Button
+                leftIcon={<FaPlus />}
+                colorScheme={"primary"}
+                onClick={async () => {
+                  const res = await fetch("/api/projects/create", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name: "New Project",
+                      description: "New Project",
+                      website: "https://example.com",
+                      sourceCode: "https://github.com",
+                      image: "/static/images/decryptor.jpg",
+                    }),
+                  });
+
+                  reloadProjects();
+
+                  if (res.status === 200) {
+                    const data = await res.json();
+                    setCurrentProject(data.project);
+                    onProjectOpen();
+                  } else {
+                    alert("Error while creating project!");
+                  }
+                }}
+              >
+                Create
+              </Button>
+            </Flex>
+            <TableContainer>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Image</Th>
+                    <Th>Name</Th>
+                    <Th>Description</Th>
+                    <Th>Website</Th>
+                    <Th>Source-Code</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {projects.map((project) => {
+                    return (
+                      <>
+                        <Tr>
+                          <Td>
+                            <Image
+                              src={project.image}
+                              alt={project.name}
+                              w={16}
+                            />
+                          </Td>
+                          <Td>{project.name}</Td>
+                          <Td>{project.description}</Td>
+                          <Td>{project.website}</Td>
+                          <Td>
+                            {project.sourceCode ? (
+                              project.sourceCode
+                            ) : (
+                              <FaTimes />
+                            )}
+                          </Td>
+                          <Td>
+                            <ButtonGroup>
+                              <IconButton
+                                aria-label={"Delete"}
+                                colorScheme={"red"}
+                                onClick={async () => {
+                                  fetch(
+                                    "/api/projects/" + project._id + "/delete",
+                                    {
+                                      method: "DELETE",
+                                    }
+                                  ).then(() => {
+                                    reloadProjects();
+                                  });
+                                }}
+                                icon={<FaTrash />}
+                              />
+                              <IconButton
+                                aria-label={"edit"}
+                                colorScheme={"primary"}
+                                onClick={async () => {
+                                  setCurrentProject(project);
+                                  onProjectOpen();
+                                }}
+                                icon={<FaPen />}
+                              />
+                            </ButtonGroup>
+                          </Td>
+                        </Tr>
+                      </>
+                    );
+                  })}
+                </Tbody>
+                <TableCaption>{projects.length} Projects total.</TableCaption>
+              </Table>
+            </TableContainer>
+          </Box>
+          <Box mt={4} flex={"100%"} w={"100%"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              direction={["column", "row"]}
+            >
+              <Heading size={"xl"}>Awards</Heading>
+              <Button
+                leftIcon={<FaPlus />}
+                colorScheme={"primary"}
+                onClick={async () => {
+                  const res = await fetch("/api/projects/awards", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  });
+
+                  reloadAwards();
+
+                  if (res.status === 200) {
+                    const data = await res.json();
+                    setCurrentAward(data.award);
+                    onAwardOpen();
+                  } else {
+                    alert("Error while creating award!");
+                  }
+                }}
+              >
+                Create
+              </Button>
+            </Flex>
+            <TableContainer>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Title</Th>
+                    <Th>Date</Th>
+                    <Th>Project</Th>
+                    <Th>Description</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {awards.map((award) => {
+                    return (
+                      <>
+                        <Tr>
+                          <Td>{award.title}</Td>
+                          <Td>{new Date(award.date).toLocaleString()}</Td>
+                          <Td>{award.project.name}</Td>
+                          <Td>{award.description}</Td>
+                          <Td>
+                            <ButtonGroup>
+                              <IconButton
+                                aria-label={"Delete"}
+                                colorScheme={"red"}
+                                onClick={async () => {
+                                  fetch(
+                                    "/api/awards/" + award._id + "/delete",
+                                    {
+                                      method: "DELETE",
+                                    }
+                                  ).then(() => {
+                                    reloadAwards();
+                                  });
+                                }}
+                                icon={<FaTrash />}
+                              />
+                              <IconButton
+                                aria-label={"edit"}
+                                colorScheme={"primary"}
+                                onClick={async () => {
+                                  setCurrentAward(award);
+                                  onAwardOpen();
+                                }}
+                                icon={<FaPen />}
+                              />
+                            </ButtonGroup>
+                          </Td>
+                        </Tr>
+                      </>
+                    );
+                  })}
+                </Tbody>
+                <TableCaption>{awards.length} Awards total.</TableCaption>
               </Table>
             </TableContainer>
           </Box>
@@ -447,6 +693,310 @@ export default function Index() {
                     variant={"outline"}
                     mr={3}
                     onClick={onBlogClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button colorScheme={"primary"} type={"submit"}>
+                    Save
+                  </Button>
+                </ModalFooter>
+              </form>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isProjectOpen}
+        onClose={onProjectClose}
+        size={["full", "2xl"]}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          {currentProject && (
+            <>
+              <ModalHeader>Edit Project: {currentProject.name}</ModalHeader>
+              <ModalCloseButton />
+
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+
+                  const name = (
+                    e.currentTarget.elements.namedItem(
+                      "name"
+                    ) as HTMLInputElement
+                  ).value;
+                  const website = (
+                    e.currentTarget.elements.namedItem(
+                      "website"
+                    ) as HTMLInputElement
+                  ).value;
+                  const sourceCode = (
+                    e.currentTarget.elements.namedItem(
+                      "sourcecode"
+                    ) as HTMLInputElement
+                  ).value;
+                  const description = (
+                    e.currentTarget.elements.namedItem(
+                      "description"
+                    ) as HTMLInputElement
+                  ).value;
+
+                  const image = currentProject.image;
+
+                  const update = {
+                    name,
+                    image,
+                    website,
+                    sourceCode,
+                    description,
+                  };
+
+                  const res = await fetch(
+                    "/api/projects/" + currentProject._id + "/update",
+                    {
+                      method: "POST",
+                      body: JSON.stringify({ update }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    }
+                  );
+
+                  if (res.status === 200) {
+                    reloadProjects();
+                    onProjectClose();
+                    return;
+                  }
+
+                  alert("Error updating project: " + (await res.json()).error);
+                }}
+              >
+                <ModalBody>
+                  <Stack gap={4}>
+                    <FormControl isRequired>
+                      <FormLabel>Name</FormLabel>
+                      <InputGroup>
+                        <InputLeftElement>
+                          <FaPen />
+                        </InputLeftElement>
+                        <Input
+                          name={"name"}
+                          defaultValue={currentProject.name}
+                          placeholder={"Name"}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Website</FormLabel>
+                      <InputGroup>
+                        <InputLeftElement>
+                          <FaGlobe />
+                        </InputLeftElement>
+                        <Input
+                          name={"website"}
+                          defaultValue={currentProject.website}
+                          placeholder={"https://codeup.space"}
+                          type={"url"}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Source-Code</FormLabel>
+                      <InputGroup>
+                        <InputLeftElement>
+                          <FaGithub />
+                        </InputLeftElement>
+                        <Input
+                          name={"sourcecode"}
+                          defaultValue={currentProject.sourceCode}
+                          placeholder={"https://github.com/MCTzOCK/codeup"}
+                          type={"url"}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Description</FormLabel>
+                      <Textarea
+                        name={"description"}
+                        placeholder={"My Super Cool Description"}
+                        defaultValue={currentProject.description}
+                      />
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Image</FormLabel>
+                      <Image
+                        src={currentProject.image}
+                        alt={currentProject.name + " Image"}
+                        rounded={"xl"}
+                        cursor={"pointer"}
+                        onClick={async () => {
+                          isNaN["__bensiebert_upload_image"] = (
+                            url: string
+                          ) => {
+                            setCurrentProject((project) => {
+                              if (typeof url === "string") {
+                                project.image = url;
+                              }
+                              return project;
+                            });
+                          };
+                          onIMGUploadOpen();
+                        }}
+                      />
+                    </FormControl>
+                  </Stack>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button
+                    colorScheme="red"
+                    variant={"outline"}
+                    mr={3}
+                    onClick={onProjectClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button colorScheme={"primary"} type={"submit"}>
+                    Save
+                  </Button>
+                </ModalFooter>
+              </form>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isAwardOpen} onClose={onAwardOpen} size={["full", "2xl"]}>
+        <ModalOverlay />
+        <ModalContent>
+          {currentAward && (
+            <>
+              <ModalHeader>Edit Award: {currentAward.title}</ModalHeader>
+              <ModalCloseButton />
+
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+
+                  const title = (
+                    e.currentTarget.elements.namedItem(
+                      "title"
+                    ) as HTMLInputElement
+                  ).value;
+                  const date = (
+                    e.currentTarget.elements.namedItem(
+                      "date"
+                    ) as HTMLInputElement
+                  ).value;
+                  const project = (
+                    e.currentTarget.elements.namedItem(
+                      "project"
+                    ) as HTMLInputElement
+                  ).value;
+                  const description = (
+                    e.currentTarget.elements.namedItem(
+                      "description"
+                    ) as HTMLInputElement
+                  ).value;
+
+                  const update = {
+                    title,
+                    date,
+                    project,
+                    description,
+                  };
+
+                  const res = await fetch(
+                    "/api/awards/" + currentAward._id + "/update",
+                    {
+                      method: "POST",
+                      body: JSON.stringify({ update }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    }
+                  );
+
+                  if (res.status === 200) {
+                    reloadAwards();
+                    onAwardClose();
+                    return;
+                  }
+
+                  alert("Error updating award: " + (await res.json()).error);
+                }}
+              >
+                <ModalBody>
+                  <Stack gap={4}>
+                    <FormControl isRequired>
+                      <FormLabel>Title</FormLabel>
+                      <InputGroup>
+                        <InputLeftElement>
+                          <FaPen />
+                        </InputLeftElement>
+                        <Input
+                          name={"title"}
+                          defaultValue={currentAward.title}
+                          placeholder={"Title"}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Date</FormLabel>
+                      <InputGroup>
+                        <InputLeftElement>
+                          <FaCalendar />
+                        </InputLeftElement>
+                        <Input
+                          name={"date"}
+                          defaultValue={`${new Date(
+                            currentAward.date
+                          ).getFullYear()}-${
+                            new Date(currentAward.date).getMonth().toString()
+                              .length === 1
+                              ? "0" +
+                                (new Date(currentAward.date).getMonth() + 1)
+                              : new Date(currentAward.date).getMonth() + 1
+                          }-${
+                            new Date(currentAward.date).getDate().toString()
+                              .length === 1
+                              ? "0" + new Date(currentAward.date).getDate()
+                              : new Date(currentAward.date).getDate()
+                          }`}
+                          type={"date"}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Project</FormLabel>
+                      <InputGroup>
+                        <Select
+                          name={"project"}
+                          defaultValue={currentAward.project._id}
+                        >
+                          {projects.map((project) => (
+                            <option value={project._id}>{project.name}</option>
+                          ))}
+                        </Select>
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl isRequired>
+                      <FormLabel>Description</FormLabel>
+                      <Textarea
+                        name={"description"}
+                        placeholder={"My Super Cool Description"}
+                        defaultValue={currentAward.description}
+                      />
+                    </FormControl>
+                  </Stack>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button
+                    colorScheme="red"
+                    variant={"outline"}
+                    mr={3}
+                    onClick={onAwardClose}
                   >
                     Cancel
                   </Button>

@@ -11,21 +11,27 @@
 import React from "react";
 import {
   Box,
+  Button,
+  ButtonGroup,
   chakra,
   Container,
   Flex,
   HStack,
+  Link,
   Text,
   useBreakpointValue,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import { PromotedProject } from "../types/PromotedProject";
+import NextLink from "next/link";
 
 const Milestones = (props: {
   milestones: {
     date: string;
     title: string;
     description: string;
+    project: PromotedProject;
     [key: string]: any;
   }[];
 }) => {
@@ -85,10 +91,18 @@ interface CardProps {
   title: string;
   description: string;
   date: string;
+  project: PromotedProject;
   [key: string]: any;
 }
 
-const Card = ({ id, title, description, date, ...rest }: CardProps) => {
+const Card = ({
+  id,
+  title,
+  description,
+  date,
+  project,
+  ...rest
+}: CardProps) => {
   const isEvenId = id % 2 == 0;
   let borderWidthValue = isEvenId ? "15px 15px 15px 0" : "15px 0 15px 15px";
   let leftValue = isEvenId ? "-15px" : "unset";
@@ -129,7 +143,10 @@ const Card = ({ id, title, description, date, ...rest }: CardProps) => {
       >
         <Text fontSize="lg" color={isEvenId ? "teal.400" : "blue.400"}>
           {new Date(date).toLocaleDateString("en-US", {
-            dateStyle: "full",
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </Text>
 
@@ -139,6 +156,9 @@ const Card = ({ id, title, description, date, ...rest }: CardProps) => {
           </chakra.h1>
           <Text fontSize="md">{description}</Text>
         </VStack>
+        <Link as={NextLink as any} href={project.website}>
+          <Button colorScheme={"primary"}>View project</Button>
+        </Link>
       </Box>
     </HStack>
   );

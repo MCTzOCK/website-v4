@@ -1,18 +1,18 @@
 /**
- * src/pages/api/blog/create.ts
+ * src/pages/api/awards/create.ts
  *
  * Author: Ben Siebert <hello@ben-siebert.de>
  * Copyright: Copyright (c) 2018-2023 Ben Siebert. All rights reserved.
  * License: Project License
- * Created At: 10.06.2023
+ * Created At: 12.06.2023
  *
  */
-
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoConnect from "@/lib/mongoConnect";
 import jwt from "jsonwebtoken";
 import UserModel from "@/lib/models/UserModel";
-import BlogModel from "@/lib/models/BlogModel";
+import PromotedProjectModel from "@/lib/models/PromotedProjectModel";
+import AwardModel from "@/lib/models/AwardModel";
 
 export default async function handleRequest(
   req: NextApiRequest,
@@ -52,17 +52,16 @@ export default async function handleRequest(
       return;
     }
 
-    const blog = await BlogModel.create({
-      title: "New Blog",
-      author: "Ben Siebert",
-      tags: ["new", "blog"],
-      content: "# This is a new blog",
-      image: "/static/images/ben.png",
+    const award = await AwardModel.create({
+      date: new Date(),
+      project: (await PromotedProjectModel.find())[0]._id,
+      title: "Example Award",
+      description: "This is an example award.",
     });
 
     res.status(200).json({
       success: true,
-      blog,
+      award,
     });
   } catch (e: any) {
     res.status(500).json({
