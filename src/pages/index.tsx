@@ -202,7 +202,7 @@ export default function Index() {
           flexDirection={"column"}
           gap={16}
         >
-          <Stack gap={4} pb={8} pt={8} maxW={["90%", "100%"]}>
+          <Stack gap={4} pb={8} pt={8} maxW={["80%", "60%"]}>
             <Text fontSize={"xl"}>Many of my code is</Text>
             <Heading size={"2xl"} color={"primary.600"}>
               open-source
