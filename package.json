@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "next build",
-    "start": "ts-node --project tsconfig.server.json src/server/index.ts",
+    "start": "cross-env NODE_ENV=production ts-node --project tsconfig.server.json src/server/index.ts",
     "lint": "next lint"
   },
   "dependencies": {

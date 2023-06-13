@@ -30,9 +30,10 @@ import NextLink from "next/link";
 import NavigationBarItems from "@/components/NavigationBarItems";
 import BrandAppImage from "@/components/BrandAppImage";
 import { FaBars } from "react-icons/fa";
+import { MEDIA_MOBILE_QUERY } from "../constants";
 
 export default function NavigationBar() {
-  const isMobile = useMediaQuery("(max-width: 1080px)")[0];
+  const isMobile = useMediaQuery(MEDIA_MOBILE_QUERY)[0];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

@@ -28,9 +28,10 @@ import { Blog } from "@/types/Blog";
 import BlogCard from "@/components/BlogCard";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
+import { MEDIA_MOBILE_QUERY } from "@/constants";
 
 export default function Index() {
-  const isMobile = useMediaQuery("(max-width: 1080px)")[0];
+  const isMobile = useMediaQuery(MEDIA_MOBILE_QUERY)[0];
 
   const [blogError, setBlogError] = React.useState<boolean>(false);
   const [blogLoading, setBlogLoading] = React.useState<boolean>(true);
@@ -99,10 +100,12 @@ export default function Index() {
             zIndex={-1}
             alt={"Ben"}
             height={"50vh"}
+            objectFit={"contain"}
           />
           <LandingPageText />
-          <Flex flex={"80%"} justifyContent={"flex-end"}>
+          <Flex justifyContent={"flex-end"} flex={"80%"}>
             <Image
+              objectFit={"cover"}
               src={"/static/images/ben2.png"}
               alt={"Ben 2"}
               height={"50vh"}
@@ -199,7 +202,7 @@ export default function Index() {
           flexDirection={"column"}
           gap={16}
         >
-          <Stack gap={4} pb={8} pt={8}>
+          <Stack gap={4} pb={8} pt={8} maxW={["90%", "100%"]}>
             <Text fontSize={"xl"}>Many of my code is</Text>
             <Heading size={"2xl"} color={"primary.600"}>
               open-source
