@@ -55,6 +55,7 @@ export default function NotFound() {
             src={"/static/images/ben.png"}
             zIndex={-1}
             alt={"Ben"}
+            objectFit={"contain"}
             height={"50vh"}
           />
           <Heading color={"primary.400"} textAlign={"center"}>

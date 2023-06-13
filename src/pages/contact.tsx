@@ -69,7 +69,7 @@ export default function Contact() {
         h={"fit-content"}
         alignItems={"center"}
         justifyContent={"center"}
-        direction={["column", "row"]}
+        direction={["column", "column", "column", "column", "row"]}
         gap={16}
       >
         <Image
@@ -78,7 +78,7 @@ export default function Contact() {
           objectFit={"contain"}
         />
         <Box
-          w={["100%", "25%"]}
+          w={["90%", "90%", "90%", "90%", "25%"]}
           p={8}
           h={"fit-content"}
           bg={"black"}

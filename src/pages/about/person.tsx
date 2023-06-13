@@ -61,11 +61,17 @@ export default function Person() {
         h={"fit-content"}
         minH={"100vh"}
       >
-        <Flex direction={["column", "row"]} w={["100%", "60%"]} gap={32}>
+        <Flex
+          direction={["column", "column", "column", "column", "row"]}
+          w={["100%", "60%"]}
+          gap={32}
+          mb={6}
+        >
           <Image
             src={"/static/images/ben4.png"}
             alt={"Ben"}
             objectFit={"contain"}
+            w={["100%", "100%", "100%", "100%", "50%"]}
           />
           <Box w={"100%"}>
             <Heading textAlign={"center"}>Ben Siebert</Heading>
